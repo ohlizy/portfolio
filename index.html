@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #ffffff;
+            --text: #1e1e1e;
+            --text-secondary: #7a7a7a;
+            --accent: #dca8b4;
+            --accent-soft: rgba(220, 168, 180, 0.12);
+            --border: #e8e8e8;
+            --name-font: 'Inter', sans-serif;
+            --name-size: 4.5rem;
+            --radius: 4px;
+            --card-shadow: 0 8px 30px rgba(0,0,0,0.04);
+            --nav-bg: rgba(255,255,255,0.88);
+            --grid-cols: 3;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --transition: 0.3s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.4s, color 0.3s;
+            letter-spacing: 0.02em;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2.5rem;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.4s;
+        }
+        .nav-left { display: flex; align-items: center; gap: 2.5rem; }
+        .nav-name {
+            font-family: var(--name-font);
+            font-weight: 500;
+            font-size: 1.4rem;
+            letter-spacing: 0.02em;
+            color: var(--text);
+            cursor: pointer;
+            transition: color 0.3s;
+            white-space: nowrap;
+            text-transform: none;
+            font-style: normal;
+        }
+        .nav-name:hover { color: var(--accent); }
+        .nav-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .nav-links button {
+            background: none;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all 0.25s;
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-links button:hover { color: var(--text); border-bottom-color: var(--accent); }
+        .nav-links button.active { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
+
+        .settings-btn {
+            background: none;
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .settings-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 2.5rem 4rem;
+            animation: fadeContent 0.5s ease;
+        }
+        @keyframes fadeContent { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .page { display: none; }
+        .page.active { display: block; }
+
+        .home-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .avatar-container {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--border);
+            margin-bottom: 0.2rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+            display: var(--avatar-display, block);
+        }
+        .avatar-container img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .home-header h1 {
+            font-family: var(--name-font);
+            font-weight: 500;
+            font-size: var(--name-size);
+            letter-spacing: -0.02em;
+            color: var(--text);
+            text-transform: none;
+            font-style: normal;
+        }
+        .home-sub {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.35em;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 0.7rem;
+            font-family: 'Inter', sans-serif;
+        }
+        .about-block {
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            text-align: center;
+            white-space: pre-wrap;
+            word-break: break-word;
+            padding: 0 1rem;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+        .gallery-item {
+            display: flex;
+            flex-direction: column;
+            border-radius: var(--radius);
+            background: #fafafa;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.35s, box-shadow 0.35s;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .gallery-item:hover { transform: translateY(-5px); box-shadow: 0 16px 36px rgba(0,0,0,0.08); }
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            overflow: hidden;
+        }
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s;
+        }
+        .gallery-item:hover .image-wrapper img { transform: scale(1.03); }
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(30,30,30,0.7);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.25s;
+            font-size: 0.9rem;
+            z-index: 5;
+        }
+        .gallery-item:hover .delete-btn { opacity: 1; }
+        .delete-btn:hover { background: #c98b9b; }
+
+        .caption {
+            padding: 0.6rem 0.8rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            background: white;
+            border-top: 1px solid var(--border);
+            word-break: break-word;
+            letter-spacing: 0.02em;
+        }
+
+        .add-card {
+            aspect-ratio: 3/4;
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            gap: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            min-height: 200px;
+            background: transparent;
+        }
+        .add-card:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+        .add-card .plus { font-size: 2.5rem; font-weight: 200; }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(6px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeOverlay 0.2s;
+        }
+        @keyframes fadeOverlay { from { opacity: 0; } to { opacity: 1; } }
+        .modal {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 540px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.14);
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            border: 1px solid var(--border);
+            animation: slideUp 0.3s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .modal h3 { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.4rem; }
+        .modal label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); }
+        .modal input[type="text"], .modal textarea, .modal select, .modal input[type="file"] {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: #fdfdfd;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+        }
+        .modal textarea { resize: vertical; min-height: 80px; }
+        .divider { display: flex; align-items: center; color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border); margin: 0 0.6rem; }
+        .btn-row { display: flex; gap: 0.8rem; justify-content: flex-end; flex-wrap: wrap; }
+        .btn {
+            padding: 0.6rem 1.6rem;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: all 0.25s;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { background: #c98b9b; }
+        .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .btn-secondary:hover { background: #f4f4f4; }
+        .btn-danger { background: transparent; border: 1px solid #d4a0ac; color: #b56576; }
+        .btn-danger:hover { background: #fdf2f4; }
+
+        .setting-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .row { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+        .color-swatch {
+            width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+            border: 2px solid transparent; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .color-swatch.selected { border-color: var(--text); transform: scale(1.1); }
+        .option-btn {
+            padding: 0.4rem 1rem; border: 1px solid var(--border); border-radius: 20px;
+            cursor: pointer; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+            background: white;
+        }
+        .option-btn.selected { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+
+        @media (max-width: 768px) {
+            nav { padding: 0 1rem; height: auto; flex-wrap: wrap; gap: 0.4rem; padding-bottom: 0.6rem; }
+            .nav-left { flex-direction: column; align-items: flex-start; width: 100%; }
+            main { padding: 1.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <div class="nav-name" id="navBrandName">YOUR NAME</div>
+            <div class="nav-links">
+                <button class="nav-tab active" data-page="home">Home</button>
+                <button class="nav-tab" data-page="brands">Brands</button>
+                <button class="nav-tab" data-page="shows">Shows</button>
+                <button class="nav-tab" data-page="skincare">Skincare</button>
+            </div>
+        </div>
+        <button class="settings-btn" id="openSettingsBtn">
+            <span>⚙</span> Customize
+        </button>
+    </nav>
+
+    <main>
+        <div id="page-home" class="page active">
+            <div class="home-header">
+                <div class="avatar-container" id="homeAvatar">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f0f0f0'/%3E%3Ccircle cx='50' cy='40' r='16' fill='%23ccc'/%3E%3Cellipse cx='50' cy='75' rx='28' ry='18' fill='%23ccc'/%3E%3C/svg%3E" alt="avatar">
+                </div>
+                <h1 id="displayName">YOUR NAME</h1>
+                <div class="home-sub" id="homeSubtitle">PORTFOLIO</div>
+            </div>
+            <div class="about-block" id="aboutBlock"></div>
+            <div class="gallery" id="gallery-home"></div>
+            <div class="add-card" data-category="home"><span class="plus">+</span> Add image</div>
+        </div>
+
+        <div id="page-brands" class="page">
+            <div class="gallery" id="gallery-brands"></div>
+            <div class="add-card" data-category="brands"><span class="plus">+</span> Add image</div>
+        </div>
+        <div id="page-shows" class="page">
+            <div class="gallery" id="gallery-shows"></div>
+            <div class="add-card" data-category="shows"><span class="plus">+</span> Add image</div>
+        </div>
+        <div id="page-skincare" class="page">
+            <div class="gallery" id="gallery-skincare"></div>
+            <div class="add-card" data-category="skincare"><span class="plus">+</span> Add image</div>
+        </div>
+    </main>
+
+    <!-- Add Image Modal -->
+    <div class="modal-overlay" id="addImageModal" style="display: none;">
+        <div class="modal">
+            <h3>New Image</h3>
+            <input type="text" id="imageUrlInput" placeholder="Paste image URL">
+            <div class="divider">or</div>
+            <input type="file" id="imageFileInput" accept="image/*">
+            <label for="imageCaptionInput">Caption (brand, comment)</label>
+            <input type="text" id="imageCaptionInput" placeholder="e.g. Chanel, Spring 2025">
+            <div class="btn-row">
+                <button class="btn btn-secondary" id="cancelAddImage">Cancel</button>
+                <button class="btn btn-primary" id="confirmAddImage">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal" style="display: none;">
+        <div class="modal">
+            <h3>Customize</h3>
+            <div class="setting-group">
+                <label>Your Name</label>
+                <input type="text" id="settingsName" placeholder="Your name">
+            </div>
+            <div class="setting-group">
+                <label>Home Subtitle</label>
+                <input type="text" id="settingsSubtitle" placeholder="PORTFOLIO">
+            </div>
+            <div class="setting-group">
+                <label>About Me</label>
+                <textarea id="settingsAbout" placeholder="A few words about you..."></textarea>
+            </div>
+            <div class="setting-group">
+                <label>Profile Photo</label>
+                <div class="row">
+                    <div class="avatar-preview" style="width:48px; height:48px; border-radius:50%; overflow:hidden; background:var(--border);">
+                        <img id="settingsAvatarPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f0f0f0'/%3E%3Ccircle cx='50' cy='40' r='16' fill='%23ccc'/%3E%3Cellipse cx='50' cy='75' rx='28' ry='18' fill='%23ccc'/%3E%3C/svg%3E" alt="preview">
+                    </div>
+                    <input type="file" id="avatarFileInput" accept="image/*" style="flex:1;">
+                </div>
+                <div class="row" style="margin-top:0.3rem;">
+                    <label style="font-weight:400; display:flex; align-items:center; gap:0.3rem;">
+                        <input type="checkbox" id="showAvatarCheckbox"> Show avatar on Home
+                    </label>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label>Name Font</label>
+                <div class="row" id="nameFontOptions">
+                    <span class="option-btn" data-font="'Inter', sans-serif">Inter</span>
+                    <span class="option-btn" data-font="'Jost', sans-serif">Jost</span>
+                    <span class="option-btn" data-font="'Playfair Display', serif">Playfair</span>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label>Name Size</label>
+                <div class="row" id="nameSizeOptions">
+                    <span class="option-btn" data-size="3.5rem">Small</span>
+                    <span class="option-btn" data-size="4.5rem">Medium</span>
+                    <span class="option-btn" data-size="6rem">Large</span>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label>Accent Color</label>
+                <div class="row" id="accentColors">
+                    <span class="color-swatch" style="background:#dca8b4;" data-color="#dca8b4"></span>
+                    <span class="color-swatch" style="background:#c49b9b;" data-color="#c49b9b"></span>
+                    <span class="color-swatch" style="background:#d9c5b0;" data-color="#d9c5b0"></span>
+                    <span class="color-swatch" style="background:#b0afaf;" data-color="#b0afaf"></span>
+                    <span class="color-swatch" style="background:#e6b8c0;" data-color="#e6b8c0"></span>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label>Background</label>
+                <div class="row" id="bgOptions">
+                    <span class="option-btn" data-bg="#ffffff">White</span>
+                    <span class="option-btn" data-bg="#f9f6f2">Beige</span>
+                    <span class="option-btn" data-bg="#f5f2ef">Warm Ivory</span>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label>Card Radius</label>
+                <div class="row" id="radiusOptions">
+                    <span class="option-btn" data-radius="0px">Sharp</span>
+                    <span class="option-btn" data-radius="8px">Soft</span>
+                    <span class="option-btn" data-radius="16px">Round</span>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label>Card Shadow</label>
+                <div class="row" id="shadowOptions">
+                    <span class="option-btn" data-shadow="none">None</span>
+                    <span class="option-btn" data-shadow="0 8px 30px rgba(0,0,0,0.04)">Subtle</span>
+                    <span class="option-btn" data-shadow="0 12px 40px rgba(0,0,0,0.12)">Strong</span>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label>Navigation Background</label>
+                <div class="row" id="navBgOptions">
+                    <span class="option-btn" data-navbg="rgba(255,255,255,0.95)">Solid White</span>
+                    <span class="option-btn" data-navbg="rgba(255,255,255,0.7)">Transparent</span>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label>Columns (desktop)</label>
+                <div class="row" id="gridColsOptions">
+                    <span class="option-btn" data-cols="2">2</span>
+                    <span class="option-btn" data-cols="3">3</span>
+                    <span class="option-btn" data-cols="4">4</span>
+                </div>
+            </div>
+
+            <div class="btn-row" style="justify-content: space-between; align-items: center;">
+                <button class="btn btn-danger" id="resetAllData">Reset All</button>
+                <button class="btn btn-secondary" id="exportDataBtn">Export data</button>
+                <div style="display: flex; gap:0.5rem;">
+                    <button class="btn btn-secondary" id="cancelSettings">Cancel</button>
+                    <button class="btn btn-primary" id="saveSettings">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const STORAGE_KEY = 'portfolio_exportable_v6';
+            const defaultState = {
+                name: 'YOUR NAME',
+                subtitle: 'PORTFOLIO',
+                about: '',
+                avatar: '',
+                showAvatar: true,
+                nameFont: "'Inter', sans-serif",
+                nameSize: '4.5rem',
+                accent: '#dca8b4',
+                bg: '#ffffff',
+                radius: '4px',
+                shadow: '0 8px 30px rgba(0,0,0,0.04)',
+                navBg: 'rgba(255,255,255,0.88)',
+                gridCols: '3',
+                images: { home: [], brands: [], shows: [], skincare: [] }
+            };
+
+            let state = JSON.parse(JSON.stringify(defaultState));
+
+            // Попытаться загрузить data.json с сервера (если запущено с GitHub Pages)
+            async function loadRemoteData() {
+                try {
+                    const response = await fetch('data.json');
+                    if (response.ok) {
+                        const remote = await response.json();
+                        // Мержим с дефолтом
+                        state = { ...defaultState, ...remote };
+                        // Нормализуем изображения
+                        for (let cat in state.images) {
+                            state.images[cat] = state.images[cat].map(item => {
+                                if (typeof item === 'string') return { url: item, caption: '' };
+                                return { url: item.url || '', caption: item.caption || '' };
+                            });
+                        }
+                        applyAll();
+                        renderAll();
+                        return true;
+                    }
+                } catch (e) {}
+                return false;
+            }
+
+            function loadLocalState() {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        state = { ...defaultState, ...parsed };
+                        for (let cat in state.images) {
+                            state.images[cat] = state.images[cat].map(item => {
+                                if (typeof item === 'string') return { url: item, caption: '' };
+                                return { url: item.url || '', caption: item.caption || '' };
+                            });
+                        }
+                    } catch (e) { state = JSON.parse(JSON.stringify(defaultState)); }
+                }
+                applyAll();
+                renderAll();
+            }
+
+            async function init() {
+                const remoteLoaded = await loadRemoteData();
+                if (!remoteLoaded) {
+                    loadLocalState();
+                }
+            }
+
+            function saveLocal() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+            function applyAll() {
+                document.documentElement.style.setProperty('--accent', state.accent);
+                document.documentElement.style.setProperty('--accent-soft', state.accent + '1a');
+                document.documentElement.style.setProperty('--bg', state.bg);
+                document.body.style.backgroundColor = state.bg;
+                document.documentElement.style.setProperty('--name-font', state.nameFont);
+                document.documentElement.style.setProperty('--name-size', state.nameSize);
+                document.documentElement.style.setProperty('--radius', state.radius);
+                document.documentElement.style.setProperty('--card-shadow', state.shadow);
+                document.documentElement.style.setProperty('--nav-bg', state.navBg);
+                document.documentElement.style.setProperty('--avatar-display', state.showAvatar ? 'block' : 'none');
+                let minWidth = '260px';
+                if (state.gridCols === '2') minWidth = '400px';
+                else if (state.gridCols === '4') minWidth = '220px';
+                document.querySelectorAll('.gallery').forEach(g => {
+                    g.style.gridTemplateColumns = `repeat(auto-fill, minmax(${minWidth}, 1fr))`;
+                });
+                document.getElementById('navBrandName').textContent = state.name;
+                document.getElementById('displayName').textContent = state.name;
+                document.getElementById('homeSubtitle').textContent = state.subtitle;
+                document.getElementById('aboutBlock').textContent = state.about || '';
+                updateAvatarDisplay();
+            }
+
+            function updateAvatarDisplay() {
+                const img = document.getElementById('homeAvatar').querySelector('img');
+                if (state.avatar) img.src = state.avatar;
+                else img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f0f0f0'/%3E%3Ccircle cx='50' cy='40' r='16' fill='%23ccc'/%3E%3Cellipse cx='50' cy='75' rx='28' ry='18' fill='%23ccc'/%3E%3C/svg%3E";
+                document.getElementById('settingsAvatarPreview').src = state.avatar || img.src;
+            }
+
+            function renderGallery(cat) {
+                const container = document.getElementById(`gallery-${cat}`);
+                if (!container) return;
+                container.innerHTML = '';
+                (state.images[cat] || []).forEach((item, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'gallery-item';
+                    div.innerHTML = `
+                        <div class="image-wrapper">
+                            <img src="${item.url}" alt="work">
+                            <button class="delete-btn" data-cat="${cat}" data-idx="${idx}">✕</button>
+                        </div>
+                        ${item.caption ? `<div class="caption">${escapeHtml(item.caption)}</div>` : ''}
+                    `;
+                    container.appendChild(div);
+                });
+                container.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const cat = btn.dataset.cat;
+                        const idx = parseInt(btn.dataset.idx, 10);
+                        state.images[cat].splice(idx, 1);
+                        saveLocal();
+                        renderGallery(cat);
+                    });
+                });
+            }
+
+            function renderAll() { ['home','brands','shows','skincare'].forEach(cat => renderGallery(cat)); }
+
+            function escapeHtml(text) {
+                return String(text).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]);
+            }
+
+            // Навигация
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const pageId = tab.dataset.page;
+                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                    document.getElementById(`page-${pageId}`).classList.add('active');
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                });
+            });
+            document.getElementById('navBrandName').addEventListener('click', () => {
+                document.querySelector('.nav-tab[data-page="home"]').click();
+            });
+
+            // Добавление фото
+            let currentCategory = 'home';
+            document.querySelectorAll('.add-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    currentCategory = card.dataset.category;
+                    document.getElementById('imageUrlInput').value = '';
+                    document.getElementById('imageFileInput').value = '';
+                    document.getElementById('imageCaptionInput').value = '';
+                    document.getElementById('addImageModal').style.display = 'flex';
+                });
+            });
+            document.getElementById('cancelAddImage').addEventListener('click', () => {
+                document.getElementById('addImageModal').style.display = 'none';
+            });
+            document.getElementById('confirmAddImage').addEventListener('click', () => {
+                const url = document.getElementById('imageUrlInput').value.trim();
+                const file = document.getElementById('imageFileInput').files[0];
+                const caption = document.getElementById('imageCaptionInput').value.trim();
+                const add = (u) => {
+                    state.images[currentCategory].push({ url: u, caption });
+                    saveLocal();
+                    renderGallery(currentCategory);
+                    document.getElementById('addImageModal').style.display = 'none';
+                };
+                if (url) add(url);
+                else if (file) {
+                    const reader = new FileReader();
+                    reader.onload = e => add(e.target.result);
+                    reader.readAsDataURL(file);
+                } else alert('Provide image URL or file.');
+            });
+
+            // Настройки
+            const settingsModal = document.getElementById('settingsModal');
+            document.getElementById('openSettingsBtn').addEventListener('click', () => {
+                document.getElementById('settingsName').value = state.name;
+                document.getElementById('settingsSubtitle').value = state.subtitle;
+                document.getElementById('settingsAbout').value = state.about || '';
+                document.getElementById('showAvatarCheckbox').checked = state.showAvatar;
+                updateAvatarDisplay();
+                selectInGroup('nameFontOptions', state.nameFont);
+                selectInGroup('nameSizeOptions', state.nameSize);
+                selectInGroup('accentColors', state.accent);
+                selectInGroup('bgOptions', state.bg);
+                selectInGroup('radiusOptions', state.radius);
+                selectInGroup('shadowOptions', state.shadow);
+                selectInGroup('navBgOptions', state.navBg);
+                selectInGroup('gridColsOptions', state.gridCols);
+                settingsModal.style.display = 'flex';
+            });
+            document.getElementById('cancelSettings').addEventListener('click', () => settingsModal.style.display = 'none');
+            document.getElementById('saveSettings').addEventListener('click', () => {
+                state.name = document.getElementById('settingsName').value.trim() || 'YOUR NAME';
+                state.subtitle = document.getElementById('settingsSubtitle').value.trim() || 'PORTFOLIO';
+                state.about = document.getElementById('settingsAbout').value.trim();
+                state.showAvatar = document.getElementById('showAvatarCheckbox').checked;
+                state.nameFont = getSelected('nameFontOptions', 'font');
+                state.nameSize = getSelected('nameSizeOptions', 'size');
+                state.accent = getSelected('accentColors', 'color');
+                state.bg = getSelected('bgOptions', 'bg');
+                state.radius = getSelected('radiusOptions', 'radius');
+                state.shadow = getSelected('shadowOptions', 'shadow');
+                state.navBg = getSelected('navBgOptions', 'navbg');
+                state.gridCols = getSelected('gridColsOptions', 'cols');
+
+                const avatarFile = document.getElementById('avatarFileInput').files[0];
+                if (avatarFile) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        state.avatar = e.target.result;
+                        applyAll(); saveLocal(); settingsModal.style.display = 'none';
+                    };
+                    reader.readAsDataURL(avatarFile);
+                } else {
+                    applyAll(); saveLocal(); settingsModal.style.display = 'none';
+                }
+            });
+
+            function selectInGroup(groupId, value) {
+                document.querySelectorAll(`#${groupId} .option-btn, #${groupId} .color-swatch`).forEach(el => {
+                    const val = el.dataset.font || el.dataset.size || el.dataset.color || el.dataset.bg || el.dataset.radius || el.dataset.shadow || el.dataset.navbg || el.dataset.cols;
+                    el.classList.toggle('selected', val === value);
+                });
+            }
+            function getSelected(groupId, attr) {
+                const el = document.querySelector(`#${groupId} .option-btn.selected, #${groupId} .color-swatch.selected`);
+                return el ? el.dataset[attr] : '';
+            }
+
+            document.querySelectorAll('.option-btn, .color-swatch').forEach(el => {
+                el.addEventListener('click', function() {
+                    this.parentElement.querySelectorAll('.option-btn, .color-swatch').forEach(s => s.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+
+            document.getElementById('resetAllData').addEventListener('click', () => {
+                if (confirm('Delete all content and reset settings?')) {
+                    state = JSON.parse(JSON.stringify(defaultState));
+                    applyAll(); renderAll(); saveLocal();
+                    settingsModal.style.display = 'none';
+                }
+            });
+
+            // Экспорт данных
+            document.getElementById('exportDataBtn').addEventListener('click', () => {
+                const dataStr = JSON.stringify(state, null, 2);
+                const blob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'data.json';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+
+            // Закрытие модалок по клику вне
+            window.addEventListener('click', e => {
+                if (e.target === document.getElementById('addImageModal')) document.getElementById('addImageModal').style.display = 'none';
+                if (e.target === settingsModal) settingsModal.style.display = 'none';
+            });
+
+            init();
+        })();
+    </script>
+</body>
+</html>
