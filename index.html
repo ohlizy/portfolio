@@ -523,7 +523,7 @@
             // Попытаться загрузить data.json с сервера (если запущено с GitHub Pages)
             async function loadRemoteData() {
                 try {
-                    const response = await fetch('data.json');
+                    const response = await fetch('data.json?v=' + Date.now());
                     if (response.ok) {
                         const remote = await response.json();
                         // Мержим с дефолтом
